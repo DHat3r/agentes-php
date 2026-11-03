@@ -14,8 +14,8 @@ x-laravel-env: &laravel-env
   REDIS_CLIENT: phpredis
   SESSION_DRIVER: array
   OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
-  OPENROUTER_MODEL: ${OPENROUTER_MODEL:-openai/gpt-4o-mini}
-  OPENROUTER_JUDGE_MODEL: ${OPENROUTER_JUDGE_MODEL:-openai/gpt-4o-mini}
+  OPENROUTER_MODEL: ${OPENROUTER_MODEL:-nvidia/nemotron-3.5-super-vl:free,nvidia/nemotron-3-ultra-550b-a55b:free,nvidia/nemotron-3.5-lightning:free}
+  OPENROUTER_JUDGE_MODEL: ${OPENROUTER_JUDGE_MODEL:-nvidia/nemotron-3.5-lightning:free,cohere/north-mini-code:free}
 
 services:
   postgres:
