@@ -133,4 +133,7 @@ return [
 
     'serializable_classes' => false,
 
+    // Segundos que se recuerda la evaluación completada de cada pregunta.
+    'evaluation_ttl' => (int) env('EVALUATION_CACHE_TTL', 3600),
+
 ];
