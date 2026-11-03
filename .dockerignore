@@ -1,0 +1,12 @@
+# El contexto de build es la raíz del monorepo: nada de secretos ni dependencias locales.
+.git
+**/.env
+**/.env.*
+!**/.env.example
+**/vendor
+**/node_modules
+**/dist
+**/.phpunit.cache
+**/storage/logs/*
+**/database/*.sqlite
+**/bootstrap/cache/*.php
