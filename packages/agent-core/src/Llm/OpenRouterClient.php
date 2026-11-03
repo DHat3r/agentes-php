@@ -1,0 +1,67 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Agentes\Core\Llm;
+
+use Agentes\Core\Exceptions\LlmException;
+use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\GuzzleException;
+
+/**
+ * Adaptador para OpenRouter, que expone una API compatible con la de OpenAI.
+ */
+final class OpenRouterClient implements LlmClient
+{
+    private readonly ClientInterface $http;
+
+    public function __construct(
+        private readonly string $apiKey,
+        private readonly string $model,
+        ?ClientInterface $http = null,
+        float $timeoutSeconds = 60,
+        string $baseUri = 'https://openrouter.ai/api/v1/',
+    ) {
+        if ($apiKey === '') {
+            throw new LlmException('Falta OPENROUTER_API_KEY. Cópiala en .env (ver .env.example).');
+        }
+        $this->http = $http ?? new Client(['base_uri' => $baseUri, 'timeout' => $timeoutSeconds]);
+    }
+
+    public function chat(array $messages, array $tools = []): LlmResponse
+    {
+        $payload = ['model' => $this->model, 'messages' => $messages];
+        if ($tools !== []) {
+            $payload['tools'] = $tools;
+            $payload['tool_choice'] = 'auto';
+        }
+
+        try {
+            $response = $this->http->request('POST', 'chat/completions', [
+                'headers' => [
+                    'Authorization' => "Bearer {$this->apiKey}",
+                    'X-Title' => 'agentes-php',
+                ],
+                'json' => $payload,
+                'http_errors' => false,
+            ]);
+        } catch (GuzzleException $e) {
+            // Incluye timeouts y errores de conexión.
+            throw new LlmException('No se pudo contactar a OpenRouter: '.$e->getMessage(), previous: $e);
+        }
+
+        $body = json_decode((string) $response->getBody(), true);
+        $status = $response->getStatusCode();
+
+        if ($status >= 400) {
+            $detail = is_array($body) ? ($body['error']['message'] ?? 'sin detalle') : 'sin detalle';
+            throw new LlmException("OpenRouter respondió HTTP {$status}: {$detail}");
+        }
+        if (! is_array($body) || ! isset($body['choices'][0]['message'])) {
+            throw new LlmException('OpenRouter devolvió una respuesta sin choices.');
+        }
+
+        return LlmResponse::fromOpenAiMessage($body['choices'][0]['message']);
+    }
+}
