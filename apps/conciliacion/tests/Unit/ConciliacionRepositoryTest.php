@@ -58,6 +58,14 @@ final class ConciliacionRepositoryTest extends TestCase
         $this->assertSame(['F-1'], array_column($this->repo->facturasDisponibles($id, montoMax: 1000, cliente: 'espiga'), 'numero'));
     }
 
+    public function test_busca_clientes_sin_importar_tildes_ni_mayusculas(): void
+    {
+        $id = $this->repo->crear([], [$this->factura('F-1', 'Panadería La Espiga', 357000), $this->factura('F-2', 'Ferretería Sur', 1)]);
+
+        $this->assertSame(['F-1'], array_column($this->repo->facturasDisponibles($id, cliente: 'PANADERIA LA ESPIGA'), 'numero'));
+        $this->assertSame(['F-2'], array_column($this->repo->facturasDisponibles($id, cliente: 'ferreteria'), 'numero'));
+    }
+
     public function test_no_mezcla_datos_de_distintas_conciliaciones(): void
     {
         $primera = $this->repo->crear([$this->movimiento('A', 1)], [$this->factura('F-1', 'Ana', 1)]);

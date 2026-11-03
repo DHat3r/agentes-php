@@ -69,12 +69,24 @@ final class ConciliacionRepository
             $sql .= ' AND monto <= ?';
             $params[] = $montoMax;
         }
-        if ($cliente !== null && trim($cliente) !== '') {
-            $sql .= ' AND LOWER(cliente) LIKE ?';
-            $params[] = '%'.mb_strtolower(trim($cliente)).'%';
-        }
+        $facturas = $this->filas($sql.' ORDER BY id', $params);
 
-        return $this->filas($sql.' ORDER BY id', $params);
+        // El filtro por cliente se hace en PHP porque los bancos escriben sin tildes
+        // ("PANADERIA") y LIKE en SQL sí las distingue. Encontrado al probar con el modelo real.
+        if ($cliente === null || trim($cliente) === '') {
+            return $facturas;
+        }
+        $buscado = $this->normalizar($cliente);
+
+        return array_values(array_filter($facturas, fn (array $f) => str_contains($this->normalizar($f['cliente']), $buscado)));
+    }
+
+    /** Minúsculas, sin tildes y con espacios simples: "Panadería  La Espiga" → "panaderia la espiga". */
+    private function normalizar(string $texto): string
+    {
+        $sinTildes = strtr(mb_strtolower(trim($texto)), ['á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u', 'ü' => 'u', 'ñ' => 'n']);
+
+        return preg_replace('/\s+/', ' ', $sinTildes);
     }
 
     public function movimiento(int $conciliacionId, int $movimientoId): ?array
