@@ -1,0 +1,85 @@
+# Levanta todo con:  docker compose up --build   →   http://localhost:8080
+
+# Variables comunes a las apps Laravel (ancla YAML para no repetirlas).
+x-laravel-env: &laravel-env
+  APP_ENV: production
+  APP_DEBUG: "false"
+  LOG_CHANNEL: stderr
+  DB_CONNECTION: pgsql
+  DB_HOST: postgres
+  DB_PORT: 5432
+  DB_USERNAME: ${DB_USERNAME:-agentes}
+  DB_PASSWORD: ${DB_PASSWORD:?Define DB_PASSWORD en .env}
+  REDIS_HOST: redis
+  REDIS_CLIENT: phpredis
+  SESSION_DRIVER: array
+  OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+  OPENROUTER_MODEL: ${OPENROUTER_MODEL:-openai/gpt-4o-mini}
+  OPENROUTER_JUDGE_MODEL: ${OPENROUTER_JUDGE_MODEL:-openai/gpt-4o-mini}
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: ${DB_USERNAME:-agentes}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Define DB_PASSWORD en .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-agentes}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    # La política LRU que el proyecto original implementaba a mano la aplica Redis.
+    command: redis-server --maxmemory 64mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  qa:
+    build:
+      context: .
+      dockerfile: docker/php/laravel.Dockerfile
+      args:
+        APP_DIR: apps/qa-evaluator
+    image: agentes-php/qa-evaluator
+    environment:
+      <<: *laravel-env
+      DB_DATABASE: qa_evaluator
+      QUEUE_CONNECTION: redis
+      CACHE_STORE: redis
+      RUN_MIGRATIONS: "true"
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+
+  # Worker de la cola: reemplaza a Kafka + Flink del proyecto original.
+  qa-worker:
+    image: agentes-php/qa-evaluator
+    command: php artisan queue:work redis --sleep=1
+    environment:
+      <<: *laravel-env
+      DB_DATABASE: qa_evaluator
+      QUEUE_CONNECTION: redis
+      CACHE_STORE: redis
+    depends_on:
+      qa: { condition: service_started }
+    restart: unless-stopped
+
+  gateway:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "${GATEWAY_PORT:-8080}:80"
+    depends_on:
+      - qa
+
+volumes:
+  postgres_data:
