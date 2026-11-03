@@ -72,6 +72,21 @@ services:
       qa: { condition: service_started }
     restart: unless-stopped
 
+  tutor:
+    build:
+      context: .
+      dockerfile: docker/php/laravel.Dockerfile
+      args:
+        APP_DIR: apps/tutor
+    environment:
+      <<: *laravel-env
+      DB_DATABASE: tutor
+      CACHE_STORE: array
+      QUEUE_CONNECTION: sync
+      RUN_MIGRATIONS: "true"
+    depends_on:
+      postgres: { condition: service_healthy }
+
   conciliacion:
     build:
       context: .
@@ -94,6 +109,7 @@ services:
       - "${GATEWAY_PORT:-8080}:80"
     depends_on:
       - qa
+      - tutor
       - conciliacion
 
 volumes:
