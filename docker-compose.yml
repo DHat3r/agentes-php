@@ -14,7 +14,7 @@ x-laravel-env: &laravel-env
   REDIS_CLIENT: phpredis
   SESSION_DRIVER: array
   OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
-  OPENROUTER_MODEL: ${OPENROUTER_MODEL:-nvidia/nemotron-3.5-super-vl:free,nvidia/nemotron-3-ultra-550b-a55b:free,nvidia/nemotron-3.5-lightning:free,openrouter/free}
+  OPENROUTER_MODEL: ${OPENROUTER_MODEL:-nvidia/nemotron-3.5-super-vl:free,nvidia/nemotron-3-ultra-550b-a55b:free,openrouter/free}
   OPENROUTER_JUDGE_MODEL: ${OPENROUTER_JUDGE_MODEL:-nvidia/nemotron-3.5-lightning:free,cohere/north-mini-code:free,openrouter/free}
 
 services:
@@ -72,6 +72,20 @@ services:
       qa: { condition: service_started }
     restart: unless-stopped
 
+  conciliacion:
+    build:
+      context: .
+      dockerfile: docker/php/slim.Dockerfile
+    environment:
+      DB_HOST: postgres
+      DB_DATABASE: conciliacion
+      DB_USERNAME: ${DB_USERNAME:-agentes}
+      DB_PASSWORD: ${DB_PASSWORD:?Define DB_PASSWORD en .env}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      OPENROUTER_MODEL: ${OPENROUTER_MODEL:-nvidia/nemotron-3.5-super-vl:free,nvidia/nemotron-3-ultra-550b-a55b:free,openrouter/free}
+    depends_on:
+      postgres: { condition: service_healthy }
+
   gateway:
     build:
       context: .
@@ -80,6 +94,7 @@ services:
       - "${GATEWAY_PORT:-8080}:80"
     depends_on:
       - qa
+      - conciliacion
 
 volumes:
   postgres_data:
