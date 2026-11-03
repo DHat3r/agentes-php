@@ -88,6 +88,27 @@ final class OpenRouterClientTest extends TestCase
         $this->client(self::json(['foo' => 'bar']))->chat([]);
     }
 
+    public function test_varios_modelos_separados_por_coma_se_envian_como_fallback(): void
+    {
+        $stack = HandlerStack::create(new MockHandler([self::json(['choices' => [['message' => ['content' => 'ok']]]])]));
+        $stack->push(Middleware::history($this->history));
+        $client = new OpenRouterClient('test-key', ' a:free, b:free ,', new Client(['handler' => $stack]));
+
+        $client->chat([]);
+
+        $payload = json_decode((string) $this->history[0]['request']->getBody(), true);
+        $this->assertSame('a:free', $payload['model']);
+        $this->assertSame(['a:free', 'b:free'], $payload['models']);
+    }
+
+    public function test_un_solo_modelo_no_envia_models(): void
+    {
+        $this->client(self::json(['choices' => [['message' => ['content' => 'ok']]]]))->chat([]);
+
+        $payload = json_decode((string) $this->history[0]['request']->getBody(), true);
+        $this->assertArrayNotHasKey('models', $payload);
+    }
+
     public function test_exige_api_key(): void
     {
         $this->expectException(LlmException::class);

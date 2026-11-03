@@ -11,14 +11,21 @@ use GuzzleHttp\Exception\GuzzleException;
 
 /**
  * Adaptador para OpenRouter, que expone una API compatible con la de OpenAI.
+ *
+ * `$model` acepta varios modelos separados por coma ("a:free,b:free"): se envían en
+ * `models` y OpenRouter usa el siguiente si el primero falla o llega a su límite de uso.
+ * Es útil con modelos gratuitos, que suelen responder 429 en horas de mucho tráfico.
  */
 final class OpenRouterClient implements LlmClient
 {
     private readonly ClientInterface $http;
 
+    /** @var list<string> */
+    private readonly array $models;
+
     public function __construct(
         private readonly string $apiKey,
-        private readonly string $model,
+        string $model,
         ?ClientInterface $http = null,
         float $timeoutSeconds = 60,
         string $baseUri = 'https://openrouter.ai/api/v1/',
@@ -26,12 +33,19 @@ final class OpenRouterClient implements LlmClient
         if ($apiKey === '') {
             throw new LlmException('Falta OPENROUTER_API_KEY. Cópiala en .env (ver .env.example).');
         }
+        $this->models = array_values(array_filter(array_map('trim', explode(',', $model))));
+        if ($this->models === []) {
+            throw new LlmException('Falta OPENROUTER_MODEL.');
+        }
         $this->http = $http ?? new Client(['base_uri' => $baseUri, 'timeout' => $timeoutSeconds]);
     }
 
     public function chat(array $messages, array $tools = []): LlmResponse
     {
-        $payload = ['model' => $this->model, 'messages' => $messages];
+        $payload = ['model' => $this->models[0], 'messages' => $messages];
+        if (count($this->models) > 1) {
+            $payload['models'] = $this->models;
+        }
         if ($tools !== []) {
             $payload['tools'] = $tools;
             $payload['tool_choice'] = 'auto';
