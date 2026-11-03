@@ -24,7 +24,7 @@ return [
     // Se crea al primer uso: sin OPENROUTER_API_KEY la app arranca igual y el error aparece al conciliar.
     LlmClient::class => factory(fn (ContainerInterface $c) => new OpenRouterClient(
         $c->get('env')['OPENROUTER_API_KEY'] ?? '',
-        $c->get('env')['OPENROUTER_MODEL'] ?? 'nvidia/nemotron-3.5-super-vl:free,nvidia/nemotron-3-ultra-550b-a55b:free,nvidia/nemotron-3.5-lightning:free,openrouter/free',
+        $c->get('env')['OPENROUTER_MODEL'] ?? 'nvidia/nemotron-3.5-super-vl:free,nvidia/nemotron-3-ultra-550b-a55b:free,openrouter/free',
         timeoutSeconds: (float) ($c->get('env')['OPENROUTER_TIMEOUT'] ?? 60),
     )),
 
