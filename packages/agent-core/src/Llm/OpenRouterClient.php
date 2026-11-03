@@ -18,6 +18,9 @@ use GuzzleHttp\Exception\GuzzleException;
  */
 final class OpenRouterClient implements LlmClient
 {
+    /** Límite de la API: con más modelos responde HTTP 400 (comprobado contra la API real). */
+    public const MAX_MODELS = 3;
+
     private readonly ClientInterface $http;
 
     /** @var list<string> */
@@ -36,6 +39,9 @@ final class OpenRouterClient implements LlmClient
         $this->models = array_values(array_filter(array_map('trim', explode(',', $model))));
         if ($this->models === []) {
             throw new LlmException('Falta OPENROUTER_MODEL.');
+        }
+        if (count($this->models) > self::MAX_MODELS) {
+            throw new LlmException('OpenRouter acepta como máximo '.self::MAX_MODELS.' modelos en OPENROUTER_MODEL.');
         }
         $this->http = $http ?? new Client(['base_uri' => $baseUri, 'timeout' => $timeoutSeconds]);
     }

@@ -101,6 +101,14 @@ final class OpenRouterClientTest extends TestCase
         $this->assertSame(['a:free', 'b:free'], $payload['models']);
     }
 
+    public function test_rechaza_mas_de_tres_modelos_antes_de_llamar_a_la_api(): void
+    {
+        $this->expectException(LlmException::class);
+        $this->expectExceptionMessage('como máximo 3');
+
+        new OpenRouterClient('test-key', 'a,b,c,d');
+    }
+
     public function test_un_solo_modelo_no_envia_models(): void
     {
         $this->client(self::json(['choices' => [['message' => ['content' => 'ok']]]]))->chat([]);
