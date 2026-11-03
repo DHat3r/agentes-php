@@ -16,6 +16,8 @@
 
 Las tres usan `packages/agent-core`, un paquete en **PHP puro, sin framework**, con el ciclo del agente. Que lo usen tanto Laravel como Slim es la prueba de que el núcleo no depende del framework.
 
+Si quieres entender el ciclo por dentro, sigue la [guía para reescribirlo](docs/GUIA_CICLO_DEL_AGENTE.md) usando sus tests.
+
 El evaluador QA es una nueva versión de [Sistemas2](https://github.com/DHat3r/Sistemas2), un proyecto universitario hecho con Gonzalo Gaete en Python, Kafka y Flink.
 
 ## Stack
