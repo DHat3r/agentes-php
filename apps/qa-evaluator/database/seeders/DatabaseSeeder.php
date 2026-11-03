@@ -2,7 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use App\Dataset\YahooAnswersImporter;
+use App\Models\Question;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -11,15 +12,15 @@ class DatabaseSeeder extends Seeder
     use WithoutModelEvents;
 
     /**
-     * Seed the application's database.
+     * Carga la muestra de preguntas solo si la tabla está vacía, para poder
+     * correr el seeder en cada arranque del contenedor sin duplicar datos.
      */
-    public function run(): void
+    public function run(YahooAnswersImporter $importer): void
     {
-        // User::factory(10)->create();
+        if (Question::query()->exists()) {
+            return;
+        }
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        $importer->import(database_path('data/preguntas_muestra.csv'));
     }
 }
