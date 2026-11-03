@@ -3,6 +3,7 @@
 namespace App\Support;
 
 use InvalidArgumentException;
+use Random\IntervalBoundary;
 use Random\Randomizer;
 
 /**
@@ -48,7 +49,7 @@ class TrafficSampler
     /** Transformada de Box-Muller: dos uniformes se convierten en una normal. */
     private function normal(float $mean, float $std): int
     {
-        $u1 = $this->random->getFloat(0, 1, \Random\IntervalBoundary::OpenClosed);
+        $u1 = $this->random->getFloat(0, 1, IntervalBoundary::OpenClosed);
         $u2 = $this->random->getFloat(0, 1);
 
         return (int) round($mean + $std * sqrt(-2 * log($u1)) * cos(2 * M_PI * $u2));

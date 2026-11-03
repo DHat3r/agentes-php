@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Agentes\Core\Exceptions\MaxIterationsReached;
 use Agentes\Core\Llm\FakeLlmClient;
 use Agentes\Core\Llm\LlmClient;
 use App\Agent\AnswerJudge;
@@ -53,7 +54,7 @@ class QaAgentTest extends TestCase
         ));
         $this->app->instance(AnswerJudge::class, new AnswerJudge(new FakeLlmClient));
 
-        $this->expectException(\Agentes\Core\Exceptions\MaxIterationsReached::class);
+        $this->expectException(MaxIterationsReached::class);
 
         app(QaAgent::class)->evaluate(Evaluation::factory()->create());
     }
