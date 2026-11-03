@@ -7,6 +7,7 @@ use Agentes\Core\Llm\OpenRouterClient;
 use App\Agent\AnswerJudge;
 use App\Agent\QaAgent;
 use App\Support\EvaluationCache;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -40,7 +41,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Las respuestas de un solo recurso van planas, sin la clave "data".
+        JsonResource::withoutWrapping();
     }
 
     private function openRouter(string $modelKey): OpenRouterClient
