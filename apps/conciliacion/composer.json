@@ -1,0 +1,38 @@
+{
+    "name": "agentes/conciliacion",
+    "description": "Conciliación bancaria asistida por un agente de IA (Slim 4).",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": "^8.4",
+        "agentes/agent-core": "@dev",
+        "php-di/php-di": "^7.0",
+        "slim/psr7": "^1.7",
+        "slim/slim": "^4.14"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.18",
+        "phpunit/phpunit": "^11.5"
+    },
+    "repositories": {
+        "agent-core": {
+            "type": "path",
+            "url": "../../packages/agent-core",
+            "options": { "symlink": false }
+        }
+    },
+    "autoload": {
+        "psr-4": { "Conciliacion\\": "src/" }
+    },
+    "autoload-dev": {
+        "psr-4": { "Conciliacion\\Tests\\": "tests/" }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "scripts": {
+        "test": "phpunit",
+        "lint": "pint --test",
+        "migrate": "php bin/migrate.php"
+    }
+}
