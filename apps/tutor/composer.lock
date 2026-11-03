@@ -4,8 +4,52 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cda2add6397422fb1a2eb5b9207f1575",
+    "content-hash": "12145dc4bfb21a0c95672db1bef41467",
     "packages": [
+        {
+            "name": "agentes/agent-core",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "../../packages/agent-core",
+                "reference": "83e47fc351221041a7ef2c05eaa667a7151b220a"
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^7.9 || ^8.0",
+                "php": "^8.4"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.18",
+                "phpunit/phpunit": "^11.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Agentes\\Core\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Agentes\\Core\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "phpunit"
+                ],
+                "lint": [
+                    "pint --test"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Ciclo de agente con tool calling, independiente del framework.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        },
         {
             "name": "brick/math",
             "version": "1.0.0",
@@ -8566,7 +8610,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": {
+        "agentes/agent-core": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

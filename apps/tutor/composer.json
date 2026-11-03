@@ -7,6 +7,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.3",
+        "agentes/agent-core": "@dev",
         "laravel/framework": "^13.17",
         "laravel/tinker": "^3.0"
     },
@@ -82,5 +83,13 @@
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": [{
+        "name": "agent-core",
+        "type": "path",
+        "url": "../../packages/agent-core",
+        "options": {
+            "symlink": false
+        }
+    }]
 }
