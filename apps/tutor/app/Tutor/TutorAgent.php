@@ -5,6 +5,7 @@ namespace App\Tutor;
 use Agentes\Core\Agent;
 use Agentes\Core\AgentResult;
 use Agentes\Core\Llm\LlmClient;
+use Agentes\Core\Tools\Tool;
 use Agentes\Core\Tools\ToolRegistry;
 use App\Models\Exercise;
 use App\Models\Student;
@@ -88,7 +89,7 @@ class TutorAgent
         return [$exercise, $result, $exercise->student->progressFor($exercise->topic)->level];
     }
 
-    private function agent(\Agentes\Core\Tools\Tool ...$tools): Agent
+    private function agent(Tool ...$tools): Agent
     {
         return new Agent($this->llm, new ToolRegistry(...$tools), $this->maxIterations);
     }
