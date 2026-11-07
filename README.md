@@ -6,6 +6,8 @@
 
 ![Conciliación: la regla resuelve lo obvio y el agente lo ambiguo](docs/demo-conciliacion.jpg)
 
+> Captura del diseño anterior en [docs/v1](docs/v1).
+
 ## Qué hay aquí
 
 | App | Framework | Qué hace el agente |
