@@ -132,7 +132,7 @@ onMounted(() => {
   <div class="space-y-6">
     <div class="grid gap-6 md:grid-cols-2">
       <!-- Estudiante -->
-      <section class="rounded-lg bg-white p-4 shadow-sm">
+      <section class="rounded-xl border border-gray-200 bg-white p-5">
         <h2 class="mb-3 text-lg font-semibold">Estudiante</h2>
         <p v-if="studentsError" class="mb-3 text-sm text-red-700">{{ studentsError }}</p>
 
@@ -160,7 +160,7 @@ onMounted(() => {
           />
           <button
             type="submit"
-            class="shrink-0 rounded-md bg-gray-800 px-3 py-1 text-sm text-white hover:bg-gray-700"
+            class="shrink-0 rounded-md bg-cobalto px-3 py-1 text-sm text-white hover:bg-cobalto-oscuro"
           >
             Crear
           </button>
@@ -168,7 +168,7 @@ onMounted(() => {
       </section>
 
       <!-- Progreso -->
-      <section class="rounded-lg bg-white p-4 shadow-sm">
+      <section class="rounded-xl border border-gray-200 bg-white p-5">
         <h2 class="mb-3 text-lg font-semibold">Progreso</h2>
         <p v-if="progressError" class="mb-3 text-sm text-red-700">{{ progressError }}</p>
         <p v-if="!selectedStudentId" class="text-sm text-gray-500">Selecciona un estudiante.</p>
@@ -200,7 +200,7 @@ onMounted(() => {
     </div>
 
     <!-- Ejercicio -->
-    <section class="rounded-lg bg-white p-4 shadow-sm">
+    <section class="rounded-xl border border-gray-200 bg-white p-5">
       <h2 class="mb-3 text-lg font-semibold">Ejercicio</h2>
       <p v-if="topicsError" class="mb-3 text-sm text-red-700">{{ topicsError }}</p>
 
@@ -218,7 +218,7 @@ onMounted(() => {
         <button
           type="button"
           :disabled="thinking || !selectedStudentId || !selectedTopic"
-          class="rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50"
+          class="rounded-md bg-cobalto px-4 py-2 text-sm font-medium text-white hover:bg-cobalto-oscuro disabled:opacity-50"
           @click="requestExercise"
         >
           Pedir ejercicio
@@ -246,7 +246,7 @@ onMounted(() => {
           <button
             type="submit"
             :disabled="thinking"
-            class="rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50"
+            class="rounded-md bg-cobalto px-4 py-2 text-sm font-medium text-white hover:bg-cobalto-oscuro disabled:opacity-50"
           >
             Responder
           </button>

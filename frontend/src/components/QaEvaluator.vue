@@ -131,11 +131,11 @@ onMounted(() => {
         {{ statsError }}
       </p>
       <div v-else-if="stats" class="grid grid-cols-2 gap-4 md:grid-cols-4">
-        <div class="rounded-lg bg-white p-4 shadow-sm">
+        <div class="rounded-xl border border-gray-200 bg-white p-5">
           <p class="text-xs text-gray-500">Preguntas</p>
           <p class="text-2xl font-semibold">{{ stats.questions }}</p>
         </div>
-        <div class="rounded-lg bg-white p-4 shadow-sm">
+        <div class="rounded-xl border border-gray-200 bg-white p-5">
           <p class="text-xs text-gray-500">Evaluaciones</p>
           <p class="text-sm">
             Completadas: <strong>{{ stats.evaluations.completed }}</strong>
@@ -147,11 +147,11 @@ onMounted(() => {
             Pendientes: <strong>{{ stats.evaluations.pending }}</strong>
           </p>
         </div>
-        <div class="rounded-lg bg-white p-4 shadow-sm">
+        <div class="rounded-xl border border-gray-200 bg-white p-5">
           <p class="text-xs text-gray-500">Puntaje promedio</p>
           <p class="text-2xl font-semibold">{{ formatScore(stats.average_overall) }}</p>
         </div>
-        <div class="rounded-lg bg-white p-4 shadow-sm">
+        <div class="rounded-xl border border-gray-200 bg-white p-5">
           <p class="text-xs text-gray-500">Caché</p>
           <p class="text-sm">Aciertos: <strong>{{ stats.cache.hits }}</strong></p>
           <p class="text-sm">Fallos: <strong>{{ stats.cache.misses }}</strong></p>
@@ -160,7 +160,7 @@ onMounted(() => {
     </section>
 
     <!-- Simular tráfico -->
-    <section class="rounded-lg bg-white p-4 shadow-sm">
+    <section class="rounded-xl border border-gray-200 bg-white p-5">
       <h2 class="mb-3 text-lg font-semibold">Simular tráfico</h2>
       <form class="flex flex-wrap items-end gap-3" @submit.prevent="simulateTraffic">
         <label class="flex flex-col text-sm">
@@ -188,7 +188,7 @@ onMounted(() => {
         <button
           type="submit"
           :disabled="trafficLoading"
-          class="rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50"
+          class="rounded-md bg-cobalto px-4 py-2 text-sm font-medium text-white hover:bg-cobalto-oscuro disabled:opacity-50"
         >
           {{ trafficLoading ? 'Encolando…' : 'Simular' }}
         </button>
@@ -199,7 +199,7 @@ onMounted(() => {
 
     <div class="grid gap-6 md:grid-cols-2">
       <!-- Preguntas -->
-      <section class="rounded-lg bg-white p-4 shadow-sm">
+      <section class="rounded-xl border border-gray-200 bg-white p-5">
         <h2 class="mb-3 text-lg font-semibold">Preguntas</h2>
         <p v-if="questionsError" class="mb-3 text-sm text-red-700">{{ questionsError }}</p>
         <p v-if="questionsLoading" class="mb-3 text-sm text-gray-500">Cargando…</p>
@@ -217,7 +217,7 @@ onMounted(() => {
             <button
               type="button"
               :disabled="evaluating"
-              class="shrink-0 rounded-md bg-gray-800 px-3 py-1 text-sm text-white hover:bg-gray-700 disabled:opacity-50"
+              class="shrink-0 rounded-md bg-cobalto px-3 py-1 text-sm text-white hover:bg-cobalto-oscuro disabled:opacity-50"
               @click="evaluate(question.id)"
             >
               Evaluar
@@ -247,7 +247,7 @@ onMounted(() => {
       </section>
 
       <!-- Resultado de la evaluación -->
-      <section class="rounded-lg bg-white p-4 shadow-sm">
+      <section class="rounded-xl border border-gray-200 bg-white p-5">
         <h2 class="mb-3 text-lg font-semibold">Evaluación</h2>
         <p v-if="evaluating" class="mb-3 text-sm text-gray-500">Evaluando…</p>
         <p v-if="evaluationError" class="mb-3 text-sm text-red-700">{{ evaluationError }}</p>

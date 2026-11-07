@@ -1,1 +1,45 @@
 @import "tailwindcss";
+
+/*
+ * Tema propio: grafito con acento cobalto.
+ * Los componentes usan las escalas gray, emerald y red de Tailwind; aquí se
+ * redefinen esas escalas con nuestros tonos, así toda la app cambia de cara
+ * sin editar cada clase. "cobalto" es el acento nuevo para botones y marcas.
+ */
+@theme {
+  --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --color-gray-50: #f6f7f9;
+  --color-gray-100: #eef0f4;
+  --color-gray-200: #e0e4ea;
+  --color-gray-300: #c9cfd9;
+  --color-gray-400: #9aa3b2;
+  --color-gray-500: #6b7486;
+  --color-gray-600: #4f5768;
+  --color-gray-700: #363d4d;
+  --color-gray-800: #232833;
+  --color-gray-900: #161a22;
+
+  --color-emerald-50: #e6f4f1;
+  --color-emerald-100: #cdeae4;
+  --color-emerald-500: #0f8a78;
+  --color-emerald-700: #0b6b5d;
+  --color-emerald-800: #08574c;
+
+  --color-red-700: #b42318;
+
+  --color-cobalto: #2547d0;
+  --color-cobalto-oscuro: #1c38ad;
+  --color-cobalto-tenue: #e8ecfb;
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-cobalto);
+  outline-offset: 2px;
+}

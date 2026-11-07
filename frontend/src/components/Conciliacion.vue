@@ -103,7 +103,7 @@ onMounted(() => {
 <template>
   <div class="space-y-6">
     <!-- Subida de archivos -->
-    <section class="rounded-lg bg-white p-4 shadow-sm">
+    <section class="rounded-xl border border-gray-200 bg-white p-5">
       <h2 class="mb-3 text-lg font-semibold">Nueva conciliación</h2>
 
       <form class="space-y-4" @submit.prevent="subirArchivos">
@@ -114,7 +114,7 @@ onMounted(() => {
               type="file"
               name="cartola"
               accept=".csv"
-              class="mt-1 block w-full text-sm"
+              class="mt-1 block w-full text-sm file:mr-3 file:rounded-md file:border-0 file:bg-cobalto-tenue file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-cobalto"
               @change="onCartolaChange"
             />
           </label>
@@ -124,7 +124,7 @@ onMounted(() => {
               type="file"
               name="facturas"
               accept=".csv"
-              class="mt-1 block w-full text-sm"
+              class="mt-1 block w-full text-sm file:mr-3 file:rounded-md file:border-0 file:bg-cobalto-tenue file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-cobalto"
               @change="onFacturasChange"
             />
           </label>
@@ -134,14 +134,14 @@ onMounted(() => {
           <a
             href="/conciliacion/api/ejemplos/cartola"
             download
-            class="text-blue-700 underline"
+            class="text-cobalto underline underline-offset-2 hover:text-cobalto-oscuro"
           >
             Descargar ejemplo de cartola
           </a>
           <a
             href="/conciliacion/api/ejemplos/facturas"
             download
-            class="text-blue-700 underline"
+            class="text-cobalto underline underline-offset-2 hover:text-cobalto-oscuro"
           >
             Descargar ejemplo de facturas
           </a>
@@ -150,7 +150,7 @@ onMounted(() => {
         <button
           type="submit"
           :disabled="submitting"
-          class="rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50"
+          class="rounded-md bg-cobalto px-4 py-2 text-sm font-medium text-white hover:bg-cobalto-oscuro disabled:opacity-50"
         >
           {{ submitting ? 'Conciliando…' : 'Conciliar' }}
         </button>
@@ -160,7 +160,7 @@ onMounted(() => {
 
     <div class="grid gap-6 md:grid-cols-3">
       <!-- Historial -->
-      <section class="rounded-lg bg-white p-4 shadow-sm md:col-span-1">
+      <section class="rounded-xl border border-gray-200 bg-white p-5 md:col-span-1">
         <h2 class="mb-3 text-lg font-semibold">Historial</h2>
         <p v-if="historialError" class="mb-3 text-sm text-red-700">{{ historialError }}</p>
         <ul class="divide-y divide-gray-200">
@@ -184,7 +184,7 @@ onMounted(() => {
       </section>
 
       <!-- Detalle -->
-      <section class="rounded-lg bg-white p-4 shadow-sm md:col-span-2">
+      <section class="rounded-xl border border-gray-200 bg-white p-5 md:col-span-2">
         <h2 class="mb-3 text-lg font-semibold">Detalle</h2>
         <p v-if="detailLoading" class="text-sm text-gray-500">Cargando…</p>
         <p v-if="detailError" class="text-sm text-red-700">{{ detailError }}</p>
